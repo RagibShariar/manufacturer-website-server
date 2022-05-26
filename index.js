@@ -111,7 +111,7 @@ async function run() {
             res.send({ result, token });
         });
 
-        // add a new order to database
+        // add a new order to database 
         app.post('/order', async (req, res) => {
             const order = req.body;
             const query = { product: order.product, userEmail: order.userEmail }
@@ -123,14 +123,14 @@ async function run() {
             return res.send({ success: true, result });
         })
 
-        // add user review to store in db
+        // add user review to store in db 
         app.post("/reviews", async (req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
             res.send(result);
         })
 
-        // get a user product info
+        // get a user product info 
         app.get('/order', verifyJWT, async (req, res) => {
             const userEmail = req.query.userEmail;
             const decodedEmail = req.decoded.email;
@@ -144,7 +144,7 @@ async function run() {
             }
         })
 
-        //order list
+        // get order list
         app.get("/order",  async (req, res) => {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
