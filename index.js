@@ -70,7 +70,7 @@ async function run() {
             res.send(users);
         });
 
-        //
+        // for admin
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email });
@@ -78,7 +78,7 @@ async function run() {
             res.send({ admin: isAdmin })
         })
 
-        //
+        // make admin
         app.put('/user/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const requester = req.decoded.email;
@@ -143,6 +143,27 @@ async function run() {
                 return res.status(403).send({ message: 'forbidden access' });
             }
         })
+
+        //order list
+        app.get("/order",  async (req, res) => {
+            const decodedEmail = req.decoded.email;
+            const email = req.query.email;
+            if (decodedEmail === email) {
+                const orders = await orderCollection.find({ email }).toArray();
+                res.send(orders);
+            } else {
+                res.status(403).send({ message: 'You are forbidden, if you try again I\'m gonna call the cops' })
+            }
+        })
+
+        // delete from order
+        app.delete('/order/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
+            res.send(result);
+        })
+
     }
     finally {
 
